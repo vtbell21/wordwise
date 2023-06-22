@@ -1,0 +1,33 @@
+{% extends 'myApp/base/base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h2 class="text-center mt-5 mb-4">Submit a Sentence</h2>
+
+            <form action="{% url 'generate-random-word' %}" method="GET" class="text-center mb-4">
+                <button type="submit" class="btn btn-primary btn-lg">Generate Random Word</button>
+            </form>
+
+            {% if random_word %}
+            <div class="text-center mt-3">
+                <span style="font-size: 24px;">{{ random_word }}</span>
+            </div>
+            {% endif %}
+
+            <form method="post" class="text-center mt-4">
+                {% csrf_token %}
+                <textarea class="form-control form-control-lg mb-3" name="sentence" rows="5"
+                    placeholder="Enter a sentence for the word {{ random_word }}"></textarea>
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+            </form>
+
+            {% if result %}
+            <h3 class="text-center mt-4">Result: {{ result }}</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

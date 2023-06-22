@@ -1,0 +1,22 @@
+{% extends 'myApp/base/base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: center;">
+    <div>
+        <h2 style="text-align: center;">Leaderboard</h2>
+
+        <table>
+            <tr>
+                <th>Username</th>
+                <th>Total Valid Attempts</th>
+            </tr>
+            {% for user in top_users %}
+            <tr>
+                <td>{{ user.user.username }}</td>
+                <td>{{ user.valid_attempts }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+{% endblock %}

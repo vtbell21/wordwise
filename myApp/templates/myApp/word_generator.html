@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Random Word Generator</title>
+</head>
+
+<body>
+    <h1>Random Word Generator</h1>
+
+    <form action="{% url 'generate-random-word' %}" method="GET">
+        <button type="submit">Generate Random Word</button>
+    </form>
+
+    {% if random_word %}
+    <div>
+        Random Word: {{ random_word }}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'sentence_form' %}">
+        {% csrf_token %}
+
+        <label for="sentence">Sentence:</label>
+        <textarea id="sentence" name="sentence" rows="4" cols="50"></textarea>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

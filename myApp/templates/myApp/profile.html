@@ -1,0 +1,28 @@
+{% extends 'myApp/base/base.html' %}
+
+{% block content %}
+<div style="display: flex; justify-content: center;">
+    <div>
+        <h2>User Profile</h2>
+
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+
+        {% if profile %}
+        <p>Total Valid Attempts: {{ total_valid_attempts }}</p>
+        <p>Total Invalid Attempts: {{ total_invalid_attempts }}</p>
+        {% if total_attempts > 0 %}
+        <p>Valid Accuracy: {{ valid_accuracy }}%</p>
+        {% else %}
+        <p>Valid Accuracy: N/A</p>
+        {% endif %}
+        {% else %}
+        <p>No user profile found.</p>
+        {% endif %}
+
+        <div style="display: flex; justify-content: center;">
+            <a href="{% url 'update_profile' %}">Update Profile</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
