@@ -21,13 +21,15 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 
 
 # Load the environment variables from the .env file
 load_dotenv()
 
 # Get the API key from the environment variable
-api_key = os.getenv('OPENAI_API_KEY')
+# api_key = os.getenv('OPENAI_API_KEY')
 
 
 def home(request):
@@ -38,9 +40,15 @@ def home(request):
 def generate_random_word(request):
     encodings = ['utf-8', 'latin-1', 'utf-16']
 
+    # Get the absolute path of the current directory
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the file path to engmix.txt
+    file_path = os.path.join(current_directory, 'engmix.txt')
+
     for encoding in encodings:
         try:
-            with open('C:/Users/greas/OneDrive/Desktop/Word Wise/myProject/myApp/engmix.txt', 'r', encoding=encoding) as file:
+            with open(file_path, 'r', encoding=encoding) as file:
                 words = file.read().split('\n')
             break
         except UnicodeDecodeError:
@@ -71,9 +79,9 @@ def sentence_form(request):
 
 # @login_required(login_url='login')
 
-
 def process_sentence(request):
     random_word = request.session.get('random_word', '')
+    api_key = settings.API_KEY
 
     if request.method == 'POST':
         form = SentenceForm(request.POST)
@@ -91,8 +99,9 @@ def process_sentence(request):
                 'model': 'gpt-3.5-turbo',
                 'messages': [
                     {'role': 'system',
-                        'content': f'You are given the word: {generate_word}'},
-                    {'role': 'user', 'content': f'respond "valid" if the following sentence is a valid sentence given the generated word, and "invalid" if the following sentence is invalid given the generated word: {sentence}'},
+                     'content': f'You are given the word: {generate_word}'},
+                    {'role': 'user',
+                     'content': f'respond "valid" if the following sentence is a valid sentence given the generated word, and "invalid" if the following sentence is invalid given the generated word: {sentence}'},
                 ],
             }
 
@@ -122,11 +131,18 @@ def process_sentence(request):
 
                 # Update user profile statistics
                 user = request.user
-                profile, created = UserProfile.objects.get_or_create(user=user)
-                profile.valid_attempts += 1  # Increment total attempts
-                if is_invalid:
-                    profile.invalid_attempts += 1  # Increment invalid attempts
-                profile.save()
+                if isinstance(user, AnonymousUser):
+                    user_id = None
+                else:
+                    user_id = user.id
+
+                if user_id:
+                    profile, created = UserProfile.objects.get_or_create(
+                        user_id=user_id)
+                    profile.valid_attempts += 1  # Increment total attempts
+                    if is_invalid:
+                        profile.invalid_attempts += 1  # Increment invalid attempts
+                    profile.save()
 
                 return render(request, 'myApp/sentence_form.html', {
                     'form': form,
@@ -186,27 +202,27 @@ def logout_view(request):
     return redirect(reverse('login'))
 
 
-@login_required
 def profile(request):
     user = request.user
-    try:
-        profile = UserProfile.objects.get(user=user)
-        total_valid_attempts = int(profile.valid_attempts)
-        total_invalid_attempts = int(profile.invalid_attempts)
-        total_attempts = total_valid_attempts + total_invalid_attempts
+    profile = None
+    total_valid_attempts = 0
+    total_invalid_attempts = 0
+    total_attempts = 0
+    valid_accuracy = 0
 
-        if total_attempts > 0:
-            valid_accuracy = (total_valid_attempts / total_attempts) * 100
-            # Round to two decimal places
-            valid_accuracy = round(valid_accuracy, 2)
-        else:
-            valid_accuracy = 0
-    except UserProfile.DoesNotExist:
-        profile = None
-        total_valid_attempts = 0
-        total_invalid_attempts = 0
-        total_attempts = 0
-        valid_accuracy = 0
+    if user.is_authenticated:
+        try:
+            profile = UserProfile.objects.get(user=user)
+            total_valid_attempts = int(profile.valid_attempts)
+            total_invalid_attempts = int(profile.invalid_attempts)
+            total_attempts = total_valid_attempts + total_invalid_attempts
+
+            if total_attempts > 0:
+                valid_accuracy = (total_valid_attempts / total_attempts) * 100
+                # Round to two decimal places
+                valid_accuracy = round(valid_accuracy, 2)
+        except UserProfile.DoesNotExist:
+            pass
 
     return render(request, 'myApp/profile.html', {
         'user': user,
