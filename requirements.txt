@@ -15,10 +15,8 @@ jmespath==1.0.1
 pathspec==0.10.1
 psycopg2==2.9.6
 pycodestyle==2.10.0
-pypiwin32==223
 python-dateutil==2.8.2
 python-dotenv==1.0.0
-pywin32==306
 PyYAML==5.4.1
 requests==2.31.0
 semantic-version==2.8.5
