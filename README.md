@@ -39,7 +39,7 @@ git clone https://github.com/vtbell21/wordwise.git
   ```shell
   python manage.py runserver
   ```
-2. Access the application in your web browser at 'http://localhost:8000/.'
+2. Access the application in your web browser at 'http://localhost:8000/'.
 3. Register a new user account or log in with an existing account.
 4. Click the "Generate Random Word" button to generate a random word.
 5. Enter a sentence in the provided textarea and click the "Submit" button to validate the sentence.
