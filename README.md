@@ -35,17 +35,18 @@ git clone https://github.com/vtbell21/wordwise.git
       ```
 ## Usage 
 
-1. ```shell
+1.Start the Django development server:
+     ```shell
       python manage.py runserver
       ```
-2. Access the application in your web browser at 'http://localhost:8000/.'
-3. Register a new user account or log in with an existing account.
-4. Click the "Generate Random Word" button to generate a random word.
-5. Enter a sentence in the provided textarea and click the "Submit" button to validate the sentence.
-6. The result of sentence validation (Valid/Invalid) will be displayed.
-7. User Statistics:
+3. Access the application in your web browser at 'http://localhost:8000/.'
+4. Register a new user account or log in with an existing account.
+5. Click the "Generate Random Word" button to generate a random word.
+6. Enter a sentence in the provided textarea and click the "Submit" button to validate the sentence.
+7. The result of sentence validation (Valid/Invalid) will be displayed.
+8. User Statistics:
    * Each user's statistics are recorded and can be viewed on their profile page.
    * Statistics include the total number of attempts and the number of valid and invalid attempts.
-8. Word Wise Leaderboard:
+9. Word Wise Leaderboard:
    * The Word Wise leaderboard displays the top users with the highest number of valid attempts.
    * Users with the highest number of valid attempts are ranked at the top.
