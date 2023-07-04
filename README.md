@@ -35,10 +35,10 @@ git clone https://github.com/vtbell21/wordwise.git
       ```
 ## Usage 
 
-1.Start the Django development server:
-     ```shell
-      python manage.py runserver
-      ```
+1. Start the Django development server:
+  ```shell
+  python manage.py runserver
+  ```
 2. Access the application in your web browser at 'http://localhost:8000/.'
 3. Register a new user account or log in with an existing account.
 4. Click the "Generate Random Word" button to generate a random word.
