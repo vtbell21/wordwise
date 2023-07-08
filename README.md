@@ -2,7 +2,7 @@
 
 Word Wise is a web application built with Django that allows users to generate a random word and validate sentences based on the generated word. It utilizes OpenAI's GPT-3.5 language model to provide sentence validation.
 
-![Alt Text](Project1__.png)
+![Alt Text](project1__.png)
 
 
 ## Features
